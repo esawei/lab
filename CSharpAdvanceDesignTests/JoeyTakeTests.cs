@@ -3,6 +3,7 @@ using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -21,7 +22,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joseph", LastName = "Yao"},
             };
 
-            var actual = JoeyTake(employees);
+            var actual = employees.JoeyTake(2);
 
             var expected = new List<Employee>
             {
@@ -32,24 +33,29 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyTake(IEnumerable<Employee> employees)
-        {
-            var enumerator = employees.GetEnumerator();
-            var index = 0;
-            var count = 2;
-            while (enumerator.MoveNext())
-            {
-                if (index < count)
-                {
-                    yield return enumerator.Current;
-                }
-                else
-                {
-                    yield break;
-                }
 
-                index++;
-            }
+        [Test]
+        public void take_3_employees()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Mike", LastName = "Chang"},
+                new Employee {FirstName = "Joseph", LastName = "Yao"},
+            };
+
+            var actual = employees.JoeyTake(3);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
         }
 
         private static IEnumerable<Employee> GetEmployees()
