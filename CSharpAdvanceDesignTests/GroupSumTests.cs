@@ -1,4 +1,7 @@
-﻿using NUnit.Framework;
+﻿using System;
+using System.Collections.Generic;
+using ExpectedObjects;
+using NUnit.Framework;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -6,7 +9,6 @@ namespace CSharpAdvanceDesignTests
     public class GroupSumTests
     {
         [Test]
-        [Ignore("not yet")]
         public void group_sum_of_saving()
         {
             var accounts = new[]
@@ -25,11 +27,39 @@ namespace CSharpAdvanceDesignTests
             };
 
             //sum of all Saving of each group which 3 Account per group
-            //var actual = MyGroupSum(?);
+            var actual = MyGroupSum(accounts, 3, account => account.Saving);
 
-            var expected = new[] { 60, 150, 240, 210 };
+            var expected = new[] {60, 150, 240, 210};
 
-            //expected.ToExpectedObject().ShouldMatch(actual);
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private IEnumerable<int> MyGroupSum<TSource>(IEnumerable<TSource> sources, int size, Func<TSource, int> selector)
+        {
+            var enumerator = sources.GetEnumerator();
+            int sum = 0;
+            var count = 0;
+            while (enumerator.MoveNext())
+            {
+                var source = enumerator.Current;
+                if (count < size)
+                {
+                    sum += selector(source);
+                    count++;
+                }
+
+                if (count == size)
+                {
+                    yield return sum;
+                    sum = 0;
+                    count = 0;
+                }
+            }
+
+            if (count > 0)
+            {
+                yield return sum;
+            }
         }
     }
 
