@@ -16,7 +16,8 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => url.Replace("http:", "https:"));
+            Func<string, string> selector = url => url.Replace("http:", "https:");
+            var actual = JoeySelect(urls, selector);
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -33,7 +34,8 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            var actual = JoeySelect(urls, url => $"{url}:9191");
+            Func<string, string> selector = url => $"{url}:9191";
+            var actual = JoeySelect(urls, selector);
             var expected = new List<string>
             {
                 "http://tw.yahoo.com:9191",
@@ -45,10 +47,30 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<string> JoeySelect(IEnumerable<string> urls, Func<string, string> selector)
+        [Test]
+        public void select_full_name()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "David", LastName = "Chen"}
+            };
+
+            var names = JoeySelect(employees, e => $"{e.FirstName} {e.LastName}");
+            var expected = new[]
+            {
+                "Joey Chen",
+                "Tom Li",
+                "David Chen",
+            };
+            expected.ToExpectedObject().ShouldMatch(names);
+        }
+
+        private IEnumerable<string> JoeySelect<TSource>(IEnumerable<TSource> employees, Func<TSource, string> selector)
         {
             var result = new List<string>();
-            foreach (var url in urls)
+            foreach (var url in employees)
             {
                 result.Add(selector(url));
             }
