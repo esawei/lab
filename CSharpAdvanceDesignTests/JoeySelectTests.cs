@@ -16,8 +16,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            Func<string, string> selector = url => url.Replace("http:", "https:");
-            var actual = JoeySelect(urls, selector);
+            var actual = JoeySelect(urls, url => url.Replace("http:", "https:"));
             var expected = new List<string>
             {
                 "https://tw.yahoo.com",
@@ -34,8 +33,7 @@ namespace CSharpAdvanceDesignTests
         {
             var urls = GetUrls();
 
-            Func<string, string> selector = url => $"{url}:9191";
-            var actual = JoeySelect(urls, selector);
+            var actual = JoeySelect(urls, url => $"{url}:9191");
             var expected = new List<string>
             {
                 "http://tw.yahoo.com:9191",
@@ -67,12 +65,12 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(names);
         }
 
-        private IEnumerable<string> JoeySelect<TSource>(IEnumerable<TSource> employees, Func<TSource, string> selector)
+        private IEnumerable<TResult> JoeySelect<TSource, TResult>(IEnumerable<TSource> source, Func<TSource, TResult> selector)
         {
-            var result = new List<string>();
-            foreach (var url in employees)
+            var result = new List<TResult>();
+            foreach (var item in source)
             {
-                result.Add(selector(url));
+                result.Add(selector(item));
             }
 
             return result;
