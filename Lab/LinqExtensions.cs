@@ -44,13 +44,13 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeySelect<TSource>(this IEnumerable<TSource> urls, Func<TSource, int, TSource> predicate)
+        public static IEnumerable<TSource> JoeySelect<TSource>(this IEnumerable<TSource> urls, Func<TSource, int, TSource> selector)
         {
             var result = new List<TSource>();
             var index = 0;
             foreach (var url in urls)
             {
-                result.Add(predicate(url, index));
+                result.Add(selector(url, index));
                 index++;
             }
             return result;
