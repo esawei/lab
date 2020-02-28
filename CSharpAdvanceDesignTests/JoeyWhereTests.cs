@@ -73,8 +73,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "May", LastName = "Chen"},
             };
 
-            Predicate<Employee> predicate = e => e.FirstName.Length < 5;
-            var actual = JoeyWhere(employees, predicate);
+            var actual = JoeyWhere(employees, e => e.FirstName.Length < 5);
 
             var expected = new List<Employee>
             {
