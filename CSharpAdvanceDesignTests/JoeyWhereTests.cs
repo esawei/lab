@@ -62,6 +62,43 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void Find_the_first_name_length_less_than_5()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Claire", LastName = "Chen"},
+                new Employee {FirstName = "May", LastName = "Chen"},
+            };
+
+            var actual = JoeyWhereForEmployee(
+                employees, e => e.FirstName.Length < 5);
+
+            var expected = new List<Employee>
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "May", LastName = "Chen"},
+            };
+
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private List<Employee> JoeyWhereForEmployee(List<Employee> employees, Func<Employee, bool> predicate)
+        {
+            var result = new List<Employee>();
+            foreach (var product in employees)
+            {
+                if (predicate(product))
+                {
+                    result.Add(product);
+                }
+            }
+
+            return result;
+        }
+
         private List<Product> JoeyWhere(List<Product> products, Predicate<Product> predicate)
         {
             var result = new List<Product>();
