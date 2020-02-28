@@ -41,7 +41,7 @@ namespace CSharpAdvanceDesignTests
             var result = new List<Product>();
             foreach (var product in products)
             {
-                if (product.Price >= 200 && product.Price <= 500)
+                if (product.Price > 200 && product.Price < 500)
                 {
                     result.Add(product);
                 }
