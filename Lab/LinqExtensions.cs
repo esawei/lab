@@ -53,9 +53,9 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeyTake<TSource>(this IEnumerable<TSource> employees, int count)
+        public static IEnumerable<TSource> JoeyTake<TSource>(this IEnumerable<TSource> sources, int count)
         {
-            var enumerator = employees.GetEnumerator();
+            var enumerator = sources.GetEnumerator();
             var index = 0;
             while (enumerator.MoveNext())
             {
