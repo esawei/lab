@@ -29,5 +29,19 @@ namespace Lab
 
             return result;
         }
+
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> numbers, Func<TSource, int, bool> predicate)
+        {
+            var index = 0;
+            foreach (var number in numbers)
+            {
+                if (predicate(number, index))
+                {
+                    yield return number;
+                }
+
+                index++;
+            }
+        }
     }
 }
