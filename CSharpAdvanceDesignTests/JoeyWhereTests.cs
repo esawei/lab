@@ -52,8 +52,7 @@ namespace CSharpAdvanceDesignTests
                 new Product {Id = 8, Cost = 18, Price = 780, Supplier = "Yahoo"}
             };
 
-            Predicate<Product> predicate = product => product.Price > 200 && product.Price < 500 && product.Cost < 30;
-            var actual = JoeyWhere(products, predicate);
+            var actual = JoeyWhere(products, product => product.Price > 200 && product.Price < 500 && product.Cost < 30);
 
             var expected = new List<Product>
             {
