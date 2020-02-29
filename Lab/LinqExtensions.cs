@@ -129,12 +129,9 @@ namespace Lab
         public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> sources)
         {
             var enumerator = sources.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                return enumerator.Current;
-            }
-
-            throw new InvalidOperationException($"{nameof(sources)} is empty");
+            return enumerator.MoveNext()
+                ? enumerator.Current
+                : throw new InvalidOperationException($"{nameof(sources)} is empty");
         }
     }
 }
