@@ -6,20 +6,18 @@ namespace Lab
 {
     public class CombineKeyComparer : IComparer<Employee>
     {
-        public CombineKeyComparer(Func<Employee, string> firstKeySelector, IComparer<string> firstKeyComparer)
+        public CombineKeyComparer(Func<Employee, string> keySelector, IComparer<string> keyComparer)
         {
-            FirstKeySelector = firstKeySelector;
-            FirstKeyComparer = firstKeyComparer;
+            KeySelector = keySelector;
+            KeyComparer = keyComparer;
         }
 
-        private Func<Employee, string> FirstKeySelector { get; set; }
-        private IComparer<string> FirstKeyComparer { get; set; }
+        public Func<Employee, string> KeySelector { get; set; }
+        public IComparer<string> KeyComparer { get; set; }
 
         public int Compare(Employee x, Employee y)
         {
-            var firstCompareResult = FirstKeyComparer.Compare(FirstKeySelector(x),
-                FirstKeySelector(y));
-            return firstCompareResult;
+            return KeyComparer.Compare(KeySelector(x), KeySelector(y));
         }
     }
 }
