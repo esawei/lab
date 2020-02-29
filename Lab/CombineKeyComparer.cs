@@ -4,7 +4,7 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class CombineKeyComparer
+    public class CombineKeyComparer : IComparer<Employee>
     {
         public CombineKeyComparer(Func<Employee, string> firstKeySelector, IComparer<string> firstKeyComparer)
         {
@@ -12,7 +12,14 @@ namespace Lab
             FirstKeyComparer = firstKeyComparer;
         }
 
-        public Func<Employee, string> FirstKeySelector { get; private set; }
-        public IComparer<string> FirstKeyComparer { get; private set; }
+        private Func<Employee, string> FirstKeySelector { get; set; }
+        private IComparer<string> FirstKeyComparer { get; set; }
+
+        public int Compare(Employee x, Employee y)
+        {
+            var firstCompareResult = FirstKeyComparer.Compare(FirstKeySelector(x),
+                FirstKeySelector(y));
+            return firstCompareResult;
+        }
     }
 }
