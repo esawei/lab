@@ -125,5 +125,16 @@ namespace Lab
 
             return true;
         }
+
+        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> sources)
+        {
+            var enumerator = sources.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                return enumerator.Current;
+            }
+
+            throw new InvalidOperationException($"{nameof(sources)} is empty");
+        }
     }
 }

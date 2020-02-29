@@ -3,6 +3,7 @@ using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -19,22 +20,21 @@ namespace CSharpAdvanceDesignTests
                 new Girl(){Age = 30},
             };
 
-            var girl = JoeyFirst(girls);
+            var girl = girls.JoeyFirst();
             var expected = new Girl { Age = 60 };
 
             expected.ToExpectedObject().ShouldEqual(girl);
         }
 
-        private TSource JoeyFirst<TSource>(IEnumerable<TSource> girls)
-        {
-            var enumerator = girls.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-                return current;
-            }
 
-            throw new InvalidOperationException(); 
+        [Test]
+        public void get_first_girl_when_no_girls()
+        {
+            var girls = new Girl[]
+            {
+            };
+
+            Assert.Catch<InvalidOperationException>(() => girls.JoeyFirst());
         }
     }
 }
