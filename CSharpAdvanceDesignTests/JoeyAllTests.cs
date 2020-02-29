@@ -10,7 +10,7 @@ namespace CSharpAdvanceDesignTests
     public class JoeyAllTests
     {
         [Test]
-        public void girls_all_adult()
+        public void girls_not_all_adult()
         {
             var girls = new List<Girl>
             {
@@ -26,7 +26,7 @@ namespace CSharpAdvanceDesignTests
         }
 
         [Test]
-        public void girls_not_all_adult()
+        public void girls_all_adult()
         {
             var girls = new List<Girl>
             {
