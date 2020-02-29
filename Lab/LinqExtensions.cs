@@ -19,7 +19,8 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> source, Func<TSource, TResult> selector)
+        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> source,
+            Func<TSource, TResult> selector)
         {
             var enumerator = source.GetEnumerator();
             while (enumerator.MoveNext())
@@ -28,7 +29,8 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> numbers, Func<TSource, int, bool> predicate)
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> numbers,
+            Func<TSource, int, bool> predicate)
         {
             var index = 0;
             var enumerator = numbers.GetEnumerator();
@@ -43,7 +45,8 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> sources, Func<TSource, int, TResult> selector)
+        public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> sources,
+            Func<TSource, int, TResult> selector)
         {
             var enumerator = sources.GetEnumerator();
             var index = 0;
@@ -101,7 +104,6 @@ namespace Lab
             }
 
             return false;
-
         }
 
         public static bool JoeyAny<TSource>(this IEnumerable<TSource> employees)
@@ -115,11 +117,10 @@ namespace Lab
             while (enumerator.MoveNext())
             {
                 var girl = enumerator.Current;
-                if (predicate(girl))
+                if (!predicate(girl))
                 {
-                    continue;
+                    return false;
                 }
-                return false;
             }
 
             return true;
