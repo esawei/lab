@@ -54,10 +54,10 @@ namespace CSharpAdvanceDesignTests
             var enumerator = sources.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                var employee = enumerator.Current;
-                if (predicate(employee))
+                var current = enumerator.Current;
+                if (predicate(current))
                 {
-                    return employee;
+                    return current;
                 }
             }
 
