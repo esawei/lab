@@ -76,21 +76,7 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
-                    var finalCompareResult = 0;
-                    var firstCompareResult = comboKeyComparer.FirstComparer.Compare(employee, minElement);
-                    if (firstCompareResult < 0)
-                    {
-                        finalCompareResult = firstCompareResult;
-                    }
-                    else if (firstCompareResult == 0)
-                    {
-                        var secondCompareResult = comboKeyComparer.SecondComparer.Compare(employee, minElement);
-                        if (secondCompareResult < 0)
-                        {
-                            finalCompareResult = secondCompareResult;
-                        }
-                    }
-
+                    var finalCompareResult = Compare(comboKeyComparer, employee, minElement);
                     if (finalCompareResult < 0)
                     {
                         minElement = employee;
@@ -101,6 +87,26 @@ namespace CSharpAdvanceDesignTests
                 elements.RemoveAt(index);
                 yield return minElement;
             }
+        }
+
+        private static int Compare(ComboKeyComparer comboKeyComparer, Employee employee, Employee minElement)
+        {
+            var finalCompareResult = 0;
+            var firstCompareResult = comboKeyComparer.FirstComparer.Compare(employee, minElement);
+            if (firstCompareResult < 0)
+            {
+                finalCompareResult = firstCompareResult;
+            }
+            else if (firstCompareResult == 0)
+            {
+                var secondCompareResult = comboKeyComparer.SecondComparer.Compare(employee, minElement);
+                if (secondCompareResult < 0)
+                {
+                    finalCompareResult = secondCompareResult;
+                }
+            }
+
+            return finalCompareResult;
         }
     }
 }
