@@ -39,7 +39,19 @@ namespace CSharpAdvanceDesignTests
 
         private Employee JoeyLast(IEnumerable<Employee> employees)
         {
-            throw new System.NotImplementedException();
+            var enumerator = employees.GetEnumerator();
+            Employee lastItem = null;
+            while (enumerator.MoveNext())
+            {
+                lastItem = enumerator.Current;
+            }
+
+            if (lastItem != null)
+            {
+                return lastItem;
+            }
+
+            throw new InvalidOperationException($"{nameof(employees)} is empty.");
         }
     }
 }
