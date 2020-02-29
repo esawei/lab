@@ -67,13 +67,9 @@ namespace CSharpAdvanceDesignTests
         private TSource JoeyFirst<TSource>(IEnumerable<TSource> sources)
         {
             var enumerator = sources.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                var current = enumerator.Current;
-                return current;
-            }
-
-            throw new InvalidOperationException($"{nameof(sources)} is empty");
+            return enumerator.MoveNext()
+                ? enumerator.Current
+                : throw new InvalidOperationException($"{nameof(sources)} is empty");
         }
     }
 }
