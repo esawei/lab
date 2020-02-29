@@ -49,7 +49,7 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Cash", LastName = "Li"},
             };
 
-            var employee = JoeyLastWithCondition(employees);
+            var employee = JoeyLastWithCondition(employees, current => current.LastName == "Chen");
 
             new Employee {FirstName = "David", LastName = "Chen"}
                 .ToExpectedObject().ShouldMatch(employee);
@@ -64,13 +64,52 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Cash", LastName = "Li"},
             };
 
-            TestDelegate action = () => JoeyLastWithCondition(employees);
+            TestDelegate action = () => JoeyLastWithCondition(employees, current => current.LastName == "Chen");
             Assert.Throws<InvalidOperationException>(action);
         }
 
-        private Employee JoeyLastWithCondition(IEnumerable<Employee> employees)
+        [Test]
+        public void get_last_chen_when_no_employee()
         {
-            throw new NotImplementedException();
+            var employees = new List<Employee>
+            {
+            };
+
+            TestDelegate action = () => JoeyLastWithCondition(employees, current => current.LastName == "Chen");
+            Assert.Throws<InvalidOperationException>(action);
+        }
+
+        [Test]
+        public void get_last_chen_when_first_employee_is_last_chen()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Cash", LastName = "Li"},
+            };
+
+            var employee = JoeyLastWithCondition(employees, current => current.LastName == "Chen");
+
+            new Employee { FirstName = "David", LastName = "Chen" }
+                .ToExpectedObject().ShouldMatch(employee);
+        }
+
+        private Employee JoeyLastWithCondition(IEnumerable<Employee> employees, Func<Employee, bool> predicate)
+        {
+            var enumerator = employees.GetEnumerator();
+            var hasData = false;
+            Employee lastItem = null;
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    hasData = true;
+                    lastItem = current;
+                }
+            }
+
+            return hasData ? lastItem : throw new InvalidOperationException($"{nameof(employees)} is empty.");
         }
 
         private Employee JoeyLast(IEnumerable<Employee> employees)
