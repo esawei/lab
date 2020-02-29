@@ -4,6 +4,7 @@ using Lab.Entities;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -45,9 +46,9 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
-            var actual = JoeyOrderByLastNameAndFirstName(employees,
-                employee => employee.LastName,
-                Comparer<string>.Default,
+            var actual = JoeyOrderByLastNameAndFirstName(
+                employees,
+                new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
                 employee => employee.FirstName,
                 Comparer<string>.Default);
 
@@ -63,8 +64,7 @@ namespace CSharpAdvanceDesignTests
 
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
             IEnumerable<Employee> employees,
-            Func<Employee, string> firstKeySelector,
-            IComparer<string> firstKeyComparer,
+            CombineKeyComparer combineKeyComparer,
             Func<Employee, string> secondKeySelector,
             IComparer<string> secondKeyComparer)
         {
@@ -77,7 +77,7 @@ namespace CSharpAdvanceDesignTests
                 for (int i = 1; i < elements.Count; i++)
                 {
                     var employee = elements[i];
-                    var firstCompareResult = firstKeyComparer.Compare(firstKeySelector(employee), firstKeySelector(minElement));
+                    var firstCompareResult = combineKeyComparer.FirstKeyComparer.Compare(combineKeyComparer.FirstKeySelector(employee), combineKeyComparer.FirstKeySelector(minElement));
                     if (firstCompareResult < 0)
                     {
                         minElement = employee;
