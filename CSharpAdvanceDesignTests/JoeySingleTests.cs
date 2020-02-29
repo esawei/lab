@@ -26,7 +26,7 @@ namespace CSharpAdvanceDesignTests
             };
             var girl = JoeySingle(girls);
 
-            new Girl() { Name = "May" }.ToExpectedObject().ShouldMatch(girl);
+            new Girl() {Name = "May"}.ToExpectedObject().ShouldMatch(girl);
         }
 
         [Test]
@@ -43,7 +43,19 @@ namespace CSharpAdvanceDesignTests
 
         private Girl JoeySingle(IEnumerable<Girl> girls)
         {
-            throw new System.NotImplementedException();
+            var enumerator = girls.GetEnumerator();
+            if (!enumerator.MoveNext())
+            {
+                throw new InvalidOperationException($"{nameof(girls)} is not only one.");
+            }
+
+            var girl = enumerator.Current;
+            if (enumerator.MoveNext())
+            {
+                throw new InvalidOperationException($"{nameof(girls)} is not only one.");
+            }
+
+            return girl;
         }
     }
 }
