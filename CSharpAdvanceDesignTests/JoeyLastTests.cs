@@ -10,7 +10,7 @@ namespace CSharpAdvanceDesignTests
     public class JoeyLastTests
     {
         [Test]
-        public void get_last_chen()
+        public void get_last_employee()
         {
             var employees = new List<Employee>
             {
@@ -27,7 +27,7 @@ namespace CSharpAdvanceDesignTests
         }
 
         [Test]
-        public void get_last_employee_when_no_girls()
+        public void get_last_employee_when_no_employee()
         {
             var employees = new Employee[]
             {
