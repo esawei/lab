@@ -3,7 +3,7 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class ComboKeyComparer
+    public class ComboKeyComparer : IComparer<Employee>
     {
         public ComboKeyComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
         {
@@ -16,22 +16,19 @@ namespace Lab
 
         public int Compare(Employee employee, Employee minElement)
         {
-            var finalCompareResult = 0;
             var firstCompareResult = FirstComparer.Compare(employee, minElement);
-            if (firstCompareResult < 0)
+            if (firstCompareResult != 0)
             {
-                finalCompareResult = firstCompareResult;
-            }
-            else if (firstCompareResult == 0)
-            {
-                var secondCompareResult = SecondComparer.Compare(employee, minElement);
-                if (secondCompareResult < 0)
-                {
-                    finalCompareResult = secondCompareResult;
-                }
+                return firstCompareResult;
             }
 
-            return finalCompareResult;
+            var secondCompareResult = SecondComparer.Compare(employee, minElement);
+            if (secondCompareResult != 0)
+            {
+                return secondCompareResult;
+            }
+
+            return 0;
         }
     }
 }
