@@ -111,13 +111,13 @@ namespace Lab
             return employees.GetEnumerator().MoveNext();
         }
 
-        public static bool JoeyAll<TSource>(this IEnumerable<TSource> girls, Func<TSource, bool> predicate)
+        public static bool JoeyAll<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
         {
-            var enumerator = girls.GetEnumerator();
+            var enumerator = sources.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                var girl = enumerator.Current;
-                if (!predicate(girl))
+                var current = enumerator.Current;
+                if (!predicate(current))
                 {
                     return false;
                 }
