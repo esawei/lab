@@ -28,6 +28,17 @@ namespace CSharpAdvanceDesignTests
         }
 
         [Test]
+        public void get_last_employee_when_no_employee()
+        {
+            var employees = new Employee[]
+            {
+            };
+
+            TestDelegate action = () => JoeyLast(employees);
+            Assert.Throws<InvalidOperationException>(action);
+        }
+
+        [Test]
         public void get_last_chen()
         {
             var employees = new List<Employee>
@@ -44,20 +55,22 @@ namespace CSharpAdvanceDesignTests
                 .ToExpectedObject().ShouldMatch(employee);
         }
 
+        [Test]
+        public void get_last_chen_when_no_last_chen()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Cash", LastName = "Li"},
+            };
+
+            TestDelegate action = () => JoeyLastWithCondition(employees);
+            Assert.Throws<InvalidOperationException>(action);
+        }
+
         private Employee JoeyLastWithCondition(IEnumerable<Employee> employees)
         {
             throw new NotImplementedException();
-        }
-
-        [Test]
-        public void get_last_employee_when_no_employee()
-        {
-            var employees = new Employee[]
-            {
-            };
-
-            TestDelegate action = () => JoeyLast(employees);
-            Assert.Throws<InvalidOperationException>(action);
         }
 
         private Employee JoeyLast(IEnumerable<Employee> employees)
