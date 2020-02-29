@@ -55,19 +55,17 @@ namespace CSharpAdvanceDesignTests
         private Employee JoeyLastOrDefaultWithCondition(IEnumerable<Employee> employees, Func<Employee, bool> predicate)
         {
             var enumerator = employees.GetEnumerator();
-            var hasMatch = false;
-            Employee lastEmployee = null;
+            var lastEmployee = default(Employee);
             while (enumerator.MoveNext())
             {
                 var employee = enumerator.Current;
                 if (predicate(employee))
                 {
                     lastEmployee = employee;
-                    hasMatch = true;
                 }
             }
 
-            return hasMatch ? lastEmployee : default(Employee);
+            return lastEmployee;
         }
 
         private Employee JoeyLastOrDefault(IEnumerable<Employee> employees)
