@@ -88,7 +88,7 @@ namespace Lab
             }
         }
 
-        public static bool JoeyAnyWithCondition<TSource>(this IEnumerable<TSource> numbers, Func<TSource, bool> predicate)
+        public static bool JoeyAny<TSource>(this IEnumerable<TSource> numbers, Func<TSource, bool> predicate)
         {
             var enumerator = numbers.GetEnumerator();
             while (enumerator.MoveNext())
@@ -102,6 +102,11 @@ namespace Lab
 
             return false;
 
+        }
+
+        public static bool JoeyAny(this IEnumerable<Employee> employees)
+        {
+            return employees.GetEnumerator().MoveNext();
         }
     }
 }
