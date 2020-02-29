@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using Lab;
 
 namespace CSharpAdvanceDesignTests
 {
@@ -37,13 +38,17 @@ namespace CSharpAdvanceDesignTests
         public void any_number_greater_than_91()
         {
             var numbers = new[] { 87, 88, 91, 93, 0 };
-            var actual = JoeyAnyWithCondition(numbers);
+            var actual = numbers.JoeyAnyWithCondition(number => number > 91);
             Assert.IsTrue(actual);
         }
 
-        private bool JoeyAnyWithCondition(IEnumerable<int> numbers)
+
+        [Test]
+        public void any_number_greater_than_191()
         {
-            throw new NotImplementedException();
+            var numbers = new[] { 87, 88, 91, 93, 0 };
+            var actual = numbers.JoeyAnyWithCondition(number => number > 191);
+            Assert.IsFalse(actual);
         }
 
         private bool JoeyAny(IEnumerable<Employee> employees)

@@ -87,5 +87,21 @@ namespace Lab
                 index++;
             }
         }
+
+        public static bool JoeyAnyWithCondition<TSource>(this IEnumerable<TSource> numbers, Func<TSource, bool> predicate)
+        {
+            var enumerator = numbers.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var number = enumerator.Current;
+                if (predicate(number))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
     }
 }
