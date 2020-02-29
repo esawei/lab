@@ -46,12 +46,7 @@ namespace CSharpAdvanceDesignTests
                 lastItem = enumerator.Current;
             }
 
-            if (lastItem != null)
-            {
-                return lastItem;
-            }
-
-            throw new InvalidOperationException($"{nameof(employees)} is empty.");
+            return lastItem ?? throw new InvalidOperationException($"{nameof(employees)} is empty.");
         }
     }
 }
