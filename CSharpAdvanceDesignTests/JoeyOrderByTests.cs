@@ -62,6 +62,38 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
+        [Test]
+        public void orderBy_lastName_and_firstName_and_nickName()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen", NickName = "91"},
+                new Employee {FirstName = "Joey", LastName = "Chen", NickName = "19"},
+            };
+
+            var comparer = new ComboKeyComparer(
+                new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
+                new CombineKeyComparer(employee => employee.FirstName, Comparer<string>.Default));
+            comparer = new ComboKeyComparer(
+                comparer,
+                new CombineKeyComparer(e => e.NickName, Comparer<string>.Default));
+
+            var actual = JoeyOrderByLastNameAndFirstName(employees, comparer);
+
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen", NickName = "19"},
+                new Employee {FirstName = "Joey", LastName = "Chen", NickName = "91"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+            };
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
         private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
             IEnumerable<Employee> employees,
             IComparer<Employee> comparer)
