@@ -9,13 +9,22 @@ namespace Lab
     {
         public static IEnumerable<TSource> JoeyWhere<TSource>(this List<TSource> source, Predicate<TSource> predicate)
         {
-            var enumerator = source.GetEnumerator();
+            return JoeyWhere(source, (x, index) => predicate(x));
+        }
+
+        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> sources,
+            Func<TSource, int, bool> predicate)
+        {
+            var index = 0;
+            var enumerator = sources.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                if (predicate(enumerator.Current))
+                if (predicate(enumerator.Current, index))
                 {
                     yield return enumerator.Current;
                 }
+
+                index++;
             }
         }
 
@@ -26,22 +35,6 @@ namespace Lab
             while (enumerator.MoveNext())
             {
                 yield return selector(enumerator.Current);
-            }
-        }
-
-        public static IEnumerable<TSource> JoeyWhere<TSource>(this IEnumerable<TSource> numbers,
-            Func<TSource, int, bool> predicate)
-        {
-            var index = 0;
-            var enumerator = numbers.GetEnumerator();
-            while (enumerator.MoveNext())
-            {
-                if (predicate(enumerator.Current, index))
-                {
-                    yield return enumerator.Current;
-                }
-
-                index++;
             }
         }
 
@@ -76,9 +69,9 @@ namespace Lab
             }
         }
 
-        public static IEnumerable<TSource> JoeySkip<TSource>(this IEnumerable<TSource> employees, int count)
+        public static IEnumerable<TSource> JoeySkip<TSource>(this IEnumerable<TSource> sources, int count)
         {
-            var enumerator = employees.GetEnumerator();
+            var enumerator = sources.GetEnumerator();
             var index = 0;
             while (enumerator.MoveNext())
             {
@@ -91,13 +84,13 @@ namespace Lab
             }
         }
 
-        public static bool JoeyAny<TSource>(this IEnumerable<TSource> numbers, Func<TSource, bool> predicate)
+        public static bool JoeyAny<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
         {
-            var enumerator = numbers.GetEnumerator();
+            var enumerator = sources.GetEnumerator();
             while (enumerator.MoveNext())
             {
-                var number = enumerator.Current;
-                if (predicate(number))
+                var source = enumerator.Current;
+                if (predicate(source))
                 {
                     return true;
                 }
@@ -106,9 +99,9 @@ namespace Lab
             return false;
         }
 
-        public static bool JoeyAny<TSource>(this IEnumerable<TSource> employees)
+        public static bool JoeyAny<TSource>(this IEnumerable<TSource> sources)
         {
-            return employees.GetEnumerator().MoveNext();
+            return sources.GetEnumerator().MoveNext();
         }
 
         public static bool JoeyAll<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
@@ -124,14 +117,6 @@ namespace Lab
             }
 
             return true;
-        }
-
-        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> sources)
-        {
-            var enumerator = sources.GetEnumerator();
-            return enumerator.MoveNext()
-                ? enumerator.Current
-                : throw new InvalidOperationException($"{nameof(sources)} is empty");
         }
     }
 }
