@@ -40,6 +40,29 @@ namespace Lab
             return sources.GetEnumerator().MoveNext();
         }
 
+        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> sources)
+        {
+            var enumerator = sources.GetEnumerator();
+            return enumerator.MoveNext()
+                ? enumerator.Current
+                : throw new InvalidOperationException($"{nameof(sources)} is empty");
+        }
+
+        public static TSource JoeyFirst<TSource>(this IEnumerable<TSource> sources, Func<TSource, bool> predicate)
+        {
+            var enumerator = sources.GetEnumerator();
+            while (enumerator.MoveNext())
+            {
+                var current = enumerator.Current;
+                if (predicate(current))
+                {
+                    return current;
+                }
+            }
+
+            throw new InvalidOperationException($"{nameof(sources)} is empty");
+        }
+
         public static IEnumerable<TResult> JoeySelect<TSource, TResult>(this IEnumerable<TSource> source,
             Func<TSource, TResult> selector)
         {
