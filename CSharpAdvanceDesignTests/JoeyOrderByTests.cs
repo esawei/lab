@@ -46,11 +46,15 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen"},
             };
 
+            var firstComparer =
+                new CombineKeyComparer<Employee, string>(employee => employee.LastName, Comparer<string>.Default);
+            var secondComparer =
+                new CombineKeyComparer<Employee, string>(employee => employee.FirstName, Comparer<string>.Default);
             var actual = JoeyOrderByLastNameAndFirstName(
                 employees,
-                new ComboKeyComparer(
-                    new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
-                    new CombineKeyComparer(employee => employee.FirstName, Comparer<string>.Default)));
+                new ComboKeyComparer<Employee>(
+                    firstComparer,
+                    secondComparer));
 
             var expected = new[]
             {
@@ -74,12 +78,12 @@ namespace CSharpAdvanceDesignTests
                 new Employee {FirstName = "Joey", LastName = "Chen", NickName = "19"},
             };
 
-            var comparer = new ComboKeyComparer(
-                new CombineKeyComparer(employee => employee.LastName, Comparer<string>.Default),
-                new CombineKeyComparer(employee => employee.FirstName, Comparer<string>.Default));
-            comparer = new ComboKeyComparer(
+            var comparer = new ComboKeyComparer<Employee>(
+                new CombineKeyComparer<Employee, string>(employee => employee.LastName, Comparer<string>.Default),
+                new CombineKeyComparer<Employee, string>(employee => employee.FirstName, Comparer<string>.Default));
+            comparer = new ComboKeyComparer<Employee>(
                 comparer,
-                new CombineKeyComparer(e => e.NickName, Comparer<string>.Default));
+                new CombineKeyComparer<Employee, string>(e => e.NickName, Comparer<string>.Default));
 
             var actual = JoeyOrderByLastNameAndFirstName(employees, comparer);
 
@@ -94,9 +98,41 @@ namespace CSharpAdvanceDesignTests
             expected.ToExpectedObject().ShouldMatch(actual);
         }
 
-        private IEnumerable<Employee> JoeyOrderByLastNameAndFirstName(
-            IEnumerable<Employee> employees,
-            IComparer<Employee> comparer)
+        [Test]
+        public void orderBy_lastName_and_firstName_and_age()
+        {
+            var employees = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 25},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 18},
+            };
+
+            var comparer = new ComboKeyComparer<Employee>(
+                new CombineKeyComparer<Employee, string>(employee => employee.LastName, Comparer<string>.Default),
+                new CombineKeyComparer<Employee, string>(employee => employee.FirstName, Comparer<string>.Default));
+            comparer = new ComboKeyComparer<Employee>(
+                comparer,
+                new CombineKeyComparer<Employee, int>(e => e.Age, Comparer<int>.Default));
+
+            var actual = JoeyOrderByLastNameAndFirstName(employees, comparer);
+
+            var expected = new[]
+            {
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 18},
+                new Employee {FirstName = "Joey", LastName = "Chen", Age = 25},
+                new Employee {FirstName = "Joseph", LastName = "Chen"},
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Wang"},
+            };
+            expected.ToExpectedObject().ShouldMatch(actual);
+        }
+
+        private IEnumerable<TSource> JoeyOrderByLastNameAndFirstName<TSource>(
+            IEnumerable<TSource> employees,
+            IComparer<TSource> comparer)
         {
             //selection sort
             var elements = employees.ToList();

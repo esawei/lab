@@ -3,18 +3,18 @@ using Lab.Entities;
 
 namespace Lab
 {
-    public class ComboKeyComparer : IComparer<Employee>
+    public class ComboKeyComparer<TSource> : IComparer<TSource>
     {
-        public ComboKeyComparer(IComparer<Employee> firstComparer, IComparer<Employee> secondComparer)
+        public ComboKeyComparer(IComparer<TSource> firstComparer, IComparer<TSource> secondComparer)
         {
             FirstComparer = firstComparer;
             SecondComparer = secondComparer;
         }
 
-        public IComparer<Employee> FirstComparer { get; private set; }
-        public IComparer<Employee> SecondComparer { get; private set; }
+        public IComparer<TSource> FirstComparer { get; private set; }
+        public IComparer<TSource> SecondComparer { get; private set; }
 
-        public int Compare(Employee employee, Employee minElement)
+        public int Compare(TSource employee, TSource minElement)
         {
             var firstCompareResult = FirstComparer.Compare(employee, minElement);
             if (firstCompareResult != 0)
