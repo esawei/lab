@@ -76,20 +76,25 @@ namespace CSharpAdvanceDesignTests
                 {
                     var employee = elements[i];
 
+                    var finalCompareResult = 0;
                     var firstCompareResult = comboKeyComparer.FirstComparer.Compare(employee, minElement);
                     if (firstCompareResult < 0)
                     {
-                        minElement = employee;
-                        index = i;
+                        finalCompareResult = firstCompareResult;
                     }
                     else if (firstCompareResult == 0)
                     {
                         var secondCompareResult = comboKeyComparer.SecondComparer.Compare(employee, minElement);
                         if (secondCompareResult < 0)
                         {
-                            minElement = employee;
-                            index = i;
+                            finalCompareResult = secondCompareResult;
                         }
+                    }
+
+                    if (finalCompareResult < 0)
+                    {
+                        minElement = employee;
+                        index = i;
                     }
                 }
 
