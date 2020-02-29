@@ -97,19 +97,19 @@ namespace CSharpAdvanceDesignTests
         private Employee JoeyLastWithCondition(IEnumerable<Employee> employees, Func<Employee, bool> predicate)
         {
             var enumerator = employees.GetEnumerator();
-            var hasData = false;
-            Employee lastItem = null;
+            var hasMatch = false;
+            Employee employee = null;
             while (enumerator.MoveNext())
             {
                 var current = enumerator.Current;
                 if (predicate(current))
                 {
-                    hasData = true;
-                    lastItem = current;
+                    hasMatch = true;
+                    employee = current;
                 }
             }
 
-            return hasData ? lastItem : throw new InvalidOperationException($"{nameof(employees)} is empty.");
+            return hasMatch ? employee : throw new InvalidOperationException($"{nameof(employees)} is empty.");
         }
 
         private Employee JoeyLast(IEnumerable<Employee> employees)
