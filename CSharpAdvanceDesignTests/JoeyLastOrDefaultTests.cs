@@ -1,4 +1,5 @@
-﻿using Lab.Entities;
+﻿using System;
+using Lab.Entities;
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using System.Collections.Generic;
@@ -34,9 +35,53 @@ namespace CSharpAdvanceDesignTests
                 .ToExpectedObject().ShouldMatch(employee);
         }
 
+        [Test]
+        public void get_last_employee_that_last_name_chen()
+        {
+            var employees = new List<Employee>
+            {
+                new Employee {FirstName = "Tom", LastName = "Li"},
+                new Employee {FirstName = "Joey", LastName = "Chen"},
+                new Employee {FirstName = "David", LastName = "Chen"},
+                new Employee {FirstName = "Cash", LastName = "Li"},
+            };
+
+            var employee = JoeyLastOrDefaultWithCondition(employees, x => x.LastName == "Chen");
+
+                new Employee {FirstName = "David", LastName = "Chen"}
+                .ToExpectedObject().ShouldMatch(employee);
+        }
+
+        private Employee JoeyLastOrDefaultWithCondition(IEnumerable<Employee> employees, Func<Employee, bool> predicate)
+        {
+            var enumerator = employees.GetEnumerator();
+            var hasMatch = false;
+            Employee lastEmployee = null;
+            while (enumerator.MoveNext())
+            {
+                var employee = enumerator.Current;
+                if (predicate(employee))
+                {
+                    lastEmployee = employee;
+                    hasMatch = true;
+                }
+            }
+
+            return hasMatch ? lastEmployee : default(Employee);
+        }
+
         private Employee JoeyLastOrDefault(IEnumerable<Employee> employees)
         {
-            throw new System.NotImplementedException();
+            var enumerator = employees.GetEnumerator();
+            var hasMatch = false;
+            Employee employee = null;
+            while (enumerator.MoveNext())
+            {
+                employee = enumerator.Current;
+                hasMatch = true;
+            }
+
+            return hasMatch ? employee : default(Employee);
         }
     }
 }
