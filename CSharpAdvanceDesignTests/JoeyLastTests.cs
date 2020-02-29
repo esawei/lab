@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using ExpectedObjects;
 using Lab.Entities;
 using NUnit.Framework;
@@ -40,13 +41,30 @@ namespace CSharpAdvanceDesignTests
         private Employee JoeyLast(IEnumerable<Employee> employees)
         {
             var enumerator = employees.GetEnumerator();
-            Employee lastItem = null;
-            while (enumerator.MoveNext())
+            if (!enumerator.MoveNext())
             {
-                lastItem = enumerator.Current;
+                throw new InvalidOperationException($"{nameof(employees)} is empty.");
             }
 
-            return lastItem ?? throw new InvalidOperationException($"{nameof(employees)} is empty.");
+            var last = enumerator.Current;
+            while (enumerator.MoveNext())
+            {
+                last = enumerator.Current;
+            }
+
+            return last;
+
+            // Why don't use null to determinate has any item like below code?
+            // Because if input sources last item is null, will make wrong result.
+
+            //var enumerator = employees.GetEnumerator();
+            //Employee lastItem = null;
+            //while (enumerator.MoveNext())
+            //{
+            //    lastItem = enumerator.Current;
+            //}
+
+            //return lastItem ?? throw new InvalidOperationException($"{nameof(employees)} is empty.");
         }
     }
 }
