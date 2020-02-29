@@ -47,7 +47,9 @@ namespace CSharpAdvanceDesignTests
 
             var actual = JoeyOrderByLastNameAndFirstName(employees,
                 employee => employee.LastName,
-                Comparer<string>.Default, employee1 => employee1.FirstName);
+                Comparer<string>.Default,
+                employee => employee.FirstName,
+                Comparer<string>.Default);
 
             var expected = new[]
             {
@@ -63,7 +65,8 @@ namespace CSharpAdvanceDesignTests
             IEnumerable<Employee> employees,
             Func<Employee, string> firstKeySelector,
             IComparer<string> firstKeyComparer,
-            Func<Employee, string> secondKeySelector)
+            Func<Employee, string> secondKeySelector,
+            IComparer<string> secondKeyComparer)
         {
             //selection sort
             var elements = employees.ToList();
@@ -82,7 +85,7 @@ namespace CSharpAdvanceDesignTests
                     }
                     else if (firstCompareResult == 0)
                     {
-                        if (Comparer<string>.Default.Compare(secondKeySelector(employee), secondKeySelector(minElement)) < 0)
+                        if (secondKeyComparer.Compare(secondKeySelector(employee), secondKeySelector(minElement)) < 0)
                         {
                             minElement = employee;
                             index = i;
